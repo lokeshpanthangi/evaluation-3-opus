@@ -1,4 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
+from typing import List
 from database import Base
 from datetime import datetime
 
@@ -32,7 +33,6 @@ class OrderItem(Base):
     __tablename__ = "order_items"
 
     id = Column(Integer, primary_key=True, index=True)
-    order_id = Column(Integer, ForeignKey("orders.id"))  # Foreign key to Order.id
     product_id = Column(Integer, ForeignKey("products.id"))  # Foreign key to Product.id
     quantity = Column(Integer, nullable=False)
     unit_price = Column(Integer, nullable=False)
@@ -43,6 +43,8 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
+    #list of order ids
+    order_ids = Column(String, nullable=False)  # Comma-separated list of OrderItem IDs
     buyer_id = Column(Integer, ForeignKey("users.id"))  # Foreign key to User.id
     total_amount = Column(Integer, nullable=False)
     discount_percent = Column(Integer, nullable=False)

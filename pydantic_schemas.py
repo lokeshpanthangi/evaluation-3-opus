@@ -21,18 +21,14 @@ class Product(BaseModel):
 
 class Order(BaseModel):
     buyer_id: int
-    total_amount: float
-    discount_percent: float
-    final_amount: float
+    order_ids : str  # Comma-separated list of OrderItem IDs
+
 
 
 class OrderItem(BaseModel):
-    id: int
-    order_id: int
     product_id: int
     quantity: int
     unit_price: float
-    subtotal: float
 
 
 
