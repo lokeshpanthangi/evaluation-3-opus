@@ -1,6 +1,7 @@
 from jose import jwt, JWTError
-from datetime import datetime, timedelta
 from passlib.context import CryptContext
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -21,8 +22,17 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(data: dict):
     payload = {
-        "_id" : data.get("_id"),
-        "email": data.get("email"),
-        "user_type": data.get("user_type"),
+        "email": data.email,
+        "user_type": data.user_type,
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+security = HTTPBearer()
+
+def validate(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
