@@ -19,7 +19,7 @@ class Product(Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, index=True)
-    vendor_id = Column(Integer, nullable=False)  # Foreign key to User.id
+    vendor_id = Column(Integer, ForeignKey("users.id"))  # Foreign key to User.id
     name = Column(String, index=True, nullable=False)
     category = Column(String, index=True, nullable=False)
     price = Column(Integer, nullable=False)  # Base price per unit
@@ -43,7 +43,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
-    buyer_id = Column(Integer, nullable=False)  # Foreign key to User.id
+    buyer_id = Column(Integer, ForeignKey("users.id"))  # Foreign key to User.id
     total_amount = Column(Integer, nullable=False)
     discount_percent = Column(Integer, nullable=False)
     final_amount = Column(Integer, nullable=False)
